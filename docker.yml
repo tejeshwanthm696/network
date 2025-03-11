@@ -1,0 +1,56 @@
+-
+    name: A Playbook to Install Docker 
+    hosts: web_servers
+    become: yes
+
+    tasks:
+      - name: Install required dependencies for Docker
+        apt:
+          name:
+            - apt-transport-https
+            - ca-certificates
+            - curl
+            - software-properties-common
+          state: present
+          update_cache: yes
+
+      - name: Add Docker GPG apt Key
+        apt_key:
+          url: https://download.docker.com/linux/ubuntu/gpg
+          state: present
+
+      - name: Add Docker Repository
+        apt_repository:
+          repo: deb https://download.docker.com/linux/ubuntu focal stable
+          state: present
+
+      - name: Update apt and install docker-ce
+        apt:
+          name: docker-ce
+          state: latest
+          update_cache: true
+
+      - name: Ensure Docker is started and enabled on boot
+        systemd:
+          name: docker
+          enabled: yes
+          state: started
+
+      - name: Add ec2_user to docker group
+        user:
+          name: ubuntu
+          groups: docker
+          append: yes
+
+      - name: Transfer application files from GitHub repo
+        copy:
+          src: ./  # Copy all files from the root of your repo
+          dest: /home/ubuntu/app/
+          remote_src: no
+
+      - name: Build Docker image
+        command: docker build -t python-flask-app /home/ubuntu/app/
+
+      - name: Run Flask app in Docker
+        command: docker run -d -p 5000:5000 python-flask-app
+         
