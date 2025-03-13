@@ -137,7 +137,7 @@ resource "aws_instance" "example" {
   subnet_id              = aws_subnet.example.id
   associate_public_ip_address = true
   security_groups        = [aws_security_group.test.id]
-  key_name               = "devops"
+  key_name               = "networksCA"
 
   tags = {
     Name = "Instance"
