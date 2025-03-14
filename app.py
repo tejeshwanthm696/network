@@ -10,7 +10,7 @@ def home():
                 </head>
                 <body>
                 <h1> Automated Container Deployment and Administration in the Cloud </h1>
-                <h2> Docker is built and running </h2>
+                <h2> Docker is built and running.. </h2>
                 </body>
                 </html>'''
 
